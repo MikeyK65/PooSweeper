@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:PooSweep.ViewModels"
+             xmlns:behaviors="clr-namespace:PooSweep.Behaviors"
+             x:Class="PooSweep.MainPage"
+             x:DataType="vm:MainViewModel"
+             Title="PooSweep">
+
+    <ContentPage.BindingContext>
+        <vm:MainViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="20" RowSpacing="15">
+        
+        <!-- Header -->
+        <Grid Grid.Row="0" ColumnDefinitions="*, Auto" VerticalOptions="Center">
+            <Label Text="PooSweep" Style="{StaticResource Headline}" HorizontalOptions="Start" VerticalOptions="Center" />
+            <Button Grid.Column="1" Text="New Game" Command="{Binding NewGameCommand}" 
+                    HeightRequest="40" Padding="15,0" VerticalOptions="Center" />
+        </Grid>
+
+        <!-- HUD -->
+        <Border Grid.Row="1" StrokeShape="RoundRectangle 10" StrokeThickness="0" 
+                BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray900}}" 
+                Padding="15,10">
+            <Grid ColumnDefinitions="*, *, *">
+                <VerticalStackLayout Grid.Column="0" Spacing="2">
+                    <Label Text="TIME" FontSize="10" TextColor="{StaticResource Gray500}" HorizontalOptions="Center"/>
+                    <Label Text="{Binding ElapsedText}" FontSize="16" FontAttributes="Bold" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+                
+                <VerticalStackLayout Grid.Column="1" Spacing="2">
+                    <Label Text="FLAGS" FontSize="10" TextColor="{StaticResource Gray500}" HorizontalOptions="Center"/>
+                    <Label Text="{Binding RemainingFlags}" FontSize="16" FontAttributes="Bold" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+                
+                <VerticalStackLayout Grid.Column="2" Spacing="2">
+                    <Label Text="STATUS" FontSize="10" TextColor="{StaticResource Gray500}" HorizontalOptions="Center"/>
+                    <Label Text="{Binding StatusText}" FontSize="14" FontAttributes="Bold" HorizontalOptions="Center" 
+                           TextColor="{StaticResource Primary}" LineBreakMode="TailTruncation"/>
+                </VerticalStackLayout>
+            </Grid>
+        </Border>
+
+        <!-- Game Board -->
+        <CollectionView x:Name="GameGrid"
+                        Grid.Row="2"
+                        ItemsSource="{Binding Cells}"
+                        SelectionMode="None"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical" 
+                                 Span="{Binding Columns}"
+                                 HorizontalItemSpacing="1"
+                                 VerticalItemSpacing="1" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="vm:CellViewModel">
+                    <Border StrokeThickness="0" Padding="0" Margin="0"
+                            BackgroundColor="{Binding BackgroundColor}"
+                            StrokeShape="RoundRectangle 4">
+                        <Grid HeightRequest="36" WidthRequest="36">
+                            <Grid.Behaviors>
+                                <behaviors:LongPressBehavior
+                                    Duration="450"
+                                    Command="{Binding ToggleFlagCommand}"
+                                    CommandParameter="{Binding .}" />
+                            </Grid.Behaviors>
+
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    NumberOfTapsRequired="2"
+                                    Command="{Binding ChordCommand}"
+                                    CommandParameter="{Binding .}" />
+                            </Grid.GestureRecognizers>
+
+                            <Button Text="{Binding DisplayText}"
+                                    TextColor="{Binding TextColor}"
+                                    BackgroundColor="Transparent"
+                                    FontSize="18"
+                                    FontAttributes="Bold"
+                                    Padding="0"
+                                    Command="{Binding RevealCommand}"
+                                    CommandParameter="{Binding .}" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Footer / Settings -->
+        <ScrollView Grid.Row="3" Orientation="Vertical">
+            <VerticalStackLayout Spacing="15">
+                
+                <!-- Difficulty -->
+                <Grid ColumnDefinitions="Auto, *" ColumnSpacing="10" VerticalOptions="Center">
+                    <Label Text="Difficulty:" VerticalOptions="Center" TextColor="{StaticResource Gray500}"/>
+                    <Border Grid.Column="1" Stroke="{StaticResource Gray300}" StrokeThickness="1" StrokeShape="RoundRectangle 8" Padding="10,0">
+                        <Picker ItemsSource="{Binding Difficulties}"
+                                SelectedItem="{Binding SelectedDifficulty}"
+                                ItemDisplayBinding="{Binding Name}" 
+                                Title="Select Difficulty"/>
+                    </Border>
+                </Grid>
+
+                <!-- Custom Settings -->
+                <Grid ColumnDefinitions="Auto,*,Auto,*,Auto,*,Auto"
+                      RowDefinitions="Auto"
+                      ColumnSpacing="5"
+                      IsVisible="{Binding IsCustomSelected}">
+                    <Label Grid.Column="0" Text="R:" VerticalOptions="Center" FontSize="12"/>
+                    <Entry Grid.Column="1" Text="{Binding CustomRows}" Keyboard="Numeric" FontSize="12" HorizontalTextAlignment="Center"/>
+                    <Label Grid.Column="2" Text="C:" VerticalOptions="Center" FontSize="12"/>
+                    <Entry Grid.Column="3" Text="{Binding CustomColumns}" Keyboard="Numeric" FontSize="12" HorizontalTextAlignment="Center"/>
+                    <Label Grid.Column="4" Text="?:" VerticalOptions="Center" FontSize="12"/>
+                    <Entry Grid.Column="5" Text="{Binding CustomPooCount}" Keyboard="Numeric" FontSize="12" HorizontalTextAlignment="Center"/>
+                    <Button Grid.Column="6" Text="Set" Command="{Binding ApplyCustomDifficultyCommand}" 
+                            FontSize="12" Padding="10,0" HeightRequest="30"/>
+                </Grid>
+
+                <!-- Stats -->
+                <Border Stroke="{StaticResource Gray200}" StrokeThickness="1" StrokeShape="RoundRectangle 8" Padding="10" BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}">
+                    <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="5">
+                        <VerticalStackLayout Grid.Column="0" Spacing="0">
+                            <Label Text="GAMES" FontSize="9" TextColor="{StaticResource Gray500}" HorizontalOptions="Center"/>
+                            <Label Text="{Binding GamesPlayed}" FontSize="14" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" Spacing="0">
+                            <Label Text="WINS" FontSize="9" TextColor="{StaticResource Gray500}" HorizontalOptions="Center"/>
+                            <Label Text="{Binding GamesWon}" FontSize="14" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="2" Spacing="0">
+                            <Label Text="RATE" FontSize="9" TextColor="{StaticResource Gray500}" HorizontalOptions="Center"/>
+                            <Label Text="{Binding WinRateText}" FontSize="14" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="3" Spacing="0">
+                            <Label Text="BEST" FontSize="9" TextColor="{StaticResource Gray500}" HorizontalOptions="Center"/>
+                            <Label Text="{Binding BestTimeText}" FontSize="14" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+
+</ContentPage>
