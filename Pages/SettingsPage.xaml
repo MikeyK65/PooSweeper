@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:c="clr-namespace:PooSweep.Controls"
+             x:Class="PooSweep.Pages.SettingsPage"
+             Title="Options">
+
+    <Grid RowDefinitions="Auto,*">
+        <c:SceneView x:Name="Scene" Grid.RowSpan="2" Horizon="0.3" />
+
+        <Grid Padding="12,10" ColumnDefinitions="Auto,*,Auto" MaximumWidthRequest="560">
+            <c:GameButton Icon="Back" FontSize="18" ButtonColor="{StaticResource WoodLight}" ClickSound="UiBack" Clicked="OnBack"
+                          SemanticProperties.Description="Back" />
+            <Label Grid.Column="1" Text="OPTIONS" Style="{StaticResource PageTitle}" VerticalOptions="Center" />
+            <BoxView Grid.Column="2" WidthRequest="56" Color="Transparent" />
+        </Grid>
+
+        <ScrollView Grid.Row="1">
+          <Grid Padding="16,4,16,24">
+            <Border Style="{StaticResource PaperCard}" MaximumWidthRequest="560" VerticalOptions="Start">
+                <VerticalStackLayout Spacing="10">
+
+                    <Label Text="SOUND" Style="{StaticResource SectionTitle}" Margin="0" />
+                    <Grid ColumnDefinitions="110,*,44" ColumnSpacing="8">
+                        <Label Text="Music" VerticalOptions="Center" />
+                        <Slider Grid.Column="1" x:Name="MusicSlider" Minimum="0" Maximum="1" ValueChanged="OnMusicChanged"
+                                SemanticProperties.Description="Music volume" />
+                        <Label Grid.Column="2" x:Name="MusicValue" Style="{StaticResource Caption}" VerticalOptions="Center" HorizontalOptions="End" />
+                    </Grid>
+                    <Grid ColumnDefinitions="110,*,44" ColumnSpacing="8">
+                        <Label Text="Sound effects" VerticalOptions="Center" />
+                        <Slider Grid.Column="1" x:Name="SfxSlider" Minimum="0" Maximum="1" ValueChanged="OnSfxChanged" DragCompleted="OnSfxDragCompleted"
+                                SemanticProperties.Description="Sound effects volume" />
+                        <Label Grid.Column="2" x:Name="SfxValue" Style="{StaticResource Caption}" VerticalOptions="Center" HorizontalOptions="End" />
+                    </Grid>
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Mute everything" VerticalOptions="Center" />
+                        <Switch Grid.Column="1" x:Name="MuteSwitch" Toggled="OnMuteToggled" SemanticProperties.Description="Mute everything" />
+                    </Grid>
+
+                    <BoxView HeightRequest="2" Color="{StaticResource PaperEdge}" Margin="0,4" />
+                    <Label Text="YARD THEME" Style="{StaticResource SectionTitle}" Margin="0" />
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                        <c:GameButton x:Name="DayButton" Text="SUNNY DAY" FontSize="16" ButtonColor="{StaticResource Gold}" ClickSound="UiToggle" Clicked="OnDay" />
+                        <c:GameButton x:Name="DuskButton" Grid.Column="1" Text="DUSK" FontSize="16" ButtonColor="{StaticResource Purple}" ClickSound="UiToggle" Clicked="OnDusk" />
+                    </Grid>
+
+                    <BoxView HeightRequest="2" Color="{StaticResource PaperEdge}" Margin="0,4" />
+                    <Label Text="GAMEPLAY" Style="{StaticResource SectionTitle}" Margin="0" />
+                    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                        <Label Text="Tap numbers to clear around" VerticalOptions="Center" />
+                        <Switch Grid.Column="1" x:Name="ChordSwitch" Toggled="OnChordToggled" SemanticProperties.Description="Tap numbers to clear around" />
+                        <Label Grid.Row="1" Text="When a number already has that many flags next to it, tapping it digs the rest."
+                               Style="{StaticResource Caption}" />
+                    </Grid>
+                    <Grid x:Name="HapticsRow" ColumnDefinitions="*,Auto">
+                        <Label Text="Vibration" VerticalOptions="Center" />
+                        <Switch Grid.Column="1" x:Name="HapticsSwitch" Toggled="OnHapticsToggled" SemanticProperties.Description="Vibration" />
+                    </Grid>
+
+                    <BoxView HeightRequest="2" Color="{StaticResource PaperEdge}" Margin="0,4" />
+                    <Label Text="ACCESSIBILITY" Style="{StaticResource SectionTitle}" Margin="0" />
+                    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                        <Label Text="Colour-blind friendly numbers" VerticalOptions="Center" />
+                        <Switch Grid.Column="1" x:Name="ColorblindSwitch" Toggled="OnColorblindToggled" SemanticProperties.Description="Colour-blind friendly numbers" />
+                        <Label Grid.Row="1" Text="Uses a palette designed to stay distinct for all types of colour vision."
+                               Style="{StaticResource Caption}" />
+                    </Grid>
+                    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                        <Label Text="Reduce motion" VerticalOptions="Center" />
+                        <Switch Grid.Column="1" x:Name="MotionSwitch" Toggled="OnMotionToggled" SemanticProperties.Description="Reduce motion" />
+                        <Label Grid.Row="1" Text="Turns off screen shake, ripples, confetti and flying dirt."
+                               Style="{StaticResource Caption}" />
+                    </Grid>
+
+                    <BoxView HeightRequest="2" Color="{StaticResource PaperEdge}" Margin="0,4" />
+                    <c:GameButton Text="RESET ALL STATS" FontSize="16" ButtonColor="{StaticResource Red}" Clicked="OnResetStats" />
+                    <Label x:Name="VersionLabel" Style="{StaticResource Caption}" HorizontalOptions="Center" HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+            </Border>
+          </Grid>
+        </ScrollView>
+    </Grid>
+</ContentPage>

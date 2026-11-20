@@ -30,6 +30,9 @@ public sealed class GameEngine
 
     public int RevealedSafeCells { get; private set; }
 
+    /// <summary>The poo that was stepped in to lose the game (null unless lost).</summary>
+    public Cell? ExplodedCell { get; private set; }
+
     public bool CanInteract => State is GameState.NotStarted or GameState.InProgress;
 
     public void Restart(Difficulty? difficulty = null)
@@ -40,6 +43,7 @@ public sealed class GameEngine
         Board = BoardGenerator.CreateEmpty(nextDifficulty);
         RemainingFlags = nextDifficulty.PooCount;
         RevealedSafeCells = 0;
+        ExplodedCell = null;
         State = GameState.NotStarted;
     }
 
@@ -84,6 +88,7 @@ public sealed class GameEngine
         if (cell.IsPoo)
         {
             cell.IsRevealed = true;
+            ExplodedCell = cell;
             State = GameState.Lost;
             RevealAllPoo();
             return;
@@ -155,8 +160,9 @@ public sealed class GameEngine
 
     private void RevealAllPoo()
     {
+        // correctly flagged poos stay flagged, like the classic
         foreach (var c in Board)
-            if (c.IsPoo)
+            if (c.IsPoo && !c.IsFlagged)
                 c.IsRevealed = true;
     }
 

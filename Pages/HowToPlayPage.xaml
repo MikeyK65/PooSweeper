@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:c="clr-namespace:PooSweep.Controls"
+             x:Class="PooSweep.Pages.HowToPlayPage"
+             Title="How to play">
+
+    <ContentPage.Resources>
+        <Style x:Key="Step" TargetType="Border" BasedOn="{StaticResource StatTile}">
+            <Setter Property="Padding" Value="10" />
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*">
+        <c:SceneView x:Name="Scene" Grid.RowSpan="2" Horizon="0.3" />
+
+        <Grid Padding="12,10" ColumnDefinitions="Auto,*,Auto" MaximumWidthRequest="560">
+            <c:GameButton Icon="Back" FontSize="18" ButtonColor="{StaticResource WoodLight}" ClickSound="UiBack" Clicked="OnBack"
+                          SemanticProperties.Description="Back" />
+            <Label Grid.Column="1" Text="HOW TO PLAY" Style="{StaticResource PageTitle}" VerticalOptions="Center" />
+            <BoxView Grid.Column="2" WidthRequest="56" Color="Transparent" />
+        </Grid>
+
+        <ScrollView Grid.Row="1">
+          <Grid Padding="16,4,16,24">
+            <Border Style="{StaticResource PaperCard}" MaximumWidthRequest="560" VerticalOptions="Start">
+                <VerticalStackLayout Spacing="10">
+                    <Label Style="{StaticResource Body}" HorizontalTextAlignment="Center"
+                           Text="The dog's been busy. Clear the lawn by digging up every safe patch of grass - without treading in any of the poos hidden underneath." />
+
+                    <Border Style="{StaticResource Step}">
+                        <Grid ColumnDefinitions="52,*" ColumnSpacing="12">
+                            <c:IconView Icon="Shovel" WidthRequest="46" HeightRequest="46" VerticalOptions="Center" />
+                            <VerticalStackLayout Grid.Column="1">
+                                <Label Text="DIG" Style="{StaticResource Display}" FontSize="18" TextColor="{StaticResource WoodDark}" />
+                                <Label x:Name="DigText" Style="{StaticResource Body}" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+
+                    <Border Style="{StaticResource Step}">
+                        <Grid ColumnDefinitions="52,*" ColumnSpacing="12">
+                            <Label Text="3" FontFamily="Display" FontSize="40" TextColor="#D62B3A" HorizontalOptions="Center" VerticalOptions="Center" />
+                            <VerticalStackLayout Grid.Column="1">
+                                <Label Text="READ THE NUMBERS" Style="{StaticResource Display}" FontSize="18" TextColor="{StaticResource WoodDark}" />
+                                <Label Style="{StaticResource Body}" Text="A number tells you how many poos are hiding in the 8 squares touching it. No number means it's all clear - and the lawn opens up around it." />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+
+                    <Border Style="{StaticResource Step}">
+                        <Grid ColumnDefinitions="52,*" ColumnSpacing="12">
+                            <c:IconView Icon="Flag" WidthRequest="46" HeightRequest="46" VerticalOptions="Center" />
+                            <VerticalStackLayout Grid.Column="1">
+                                <Label Text="FLAG THE POOS" Style="{StaticResource Display}" FontSize="18" TextColor="{StaticResource WoodDark}" />
+                                <Label x:Name="FlagText" Style="{StaticResource Body}" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+
+                    <Border Style="{StaticResource Step}">
+                        <Grid ColumnDefinitions="52,*" ColumnSpacing="12">
+                            <c:IconView Icon="Paw" Tint="{StaticResource Wood}" WidthRequest="44" HeightRequest="44" VerticalOptions="Center" />
+                            <VerticalStackLayout Grid.Column="1">
+                                <Label Text="CLEAR AROUND" Style="{StaticResource Display}" FontSize="18" TextColor="{StaticResource WoodDark}" />
+                                <Label x:Name="ChordText" Style="{StaticResource Body}" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+
+                    <Border Style="{StaticResource Step}">
+                        <Grid ColumnDefinitions="52,*" ColumnSpacing="12">
+                            <c:DogView WidthRequest="50" HeightRequest="50" VerticalOptions="Center" InputTransparent="True" />
+                            <VerticalStackLayout Grid.Column="1">
+                                <Label Text="TIPS" Style="{StaticResource Display}" FontSize="18" TextColor="{StaticResource WoodDark}" />
+                                <Label Style="{StaticResource Body}" Text="Your first dig is always safe. Tap the dog for a fresh yard. Leaving a game half-way counts as a loss, so finish what you start!" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+
+                    <c:GameButton x:Name="GotIt" Text="GOT IT!" FontSize="22" ButtonColor="{StaticResource Orange}" Clicked="OnBack" />
+                </VerticalStackLayout>
+            </Border>
+          </Grid>
+        </ScrollView>
+    </Grid>
+</ContentPage>
