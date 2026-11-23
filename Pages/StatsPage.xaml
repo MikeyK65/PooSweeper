@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:c="clr-namespace:PooSweep.Controls"
+             x:Class="PooSweep.Pages.StatsPage"
+             Title="Stats">
+
+    <Grid RowDefinitions="Auto,*">
+        <c:SceneView x:Name="Scene" Grid.RowSpan="2" Horizon="0.3" />
+
+        <Grid Padding="12,10" ColumnDefinitions="Auto,*,Auto" MaximumWidthRequest="560">
+            <c:GameButton Icon="Back" FontSize="18" ButtonColor="{StaticResource WoodLight}" ClickSound="UiBack" Clicked="OnBack"
+                          SemanticProperties.Description="Back" />
+            <Label Grid.Column="1" Text="STATS" Style="{StaticResource PageTitle}" VerticalOptions="Center" />
+            <BoxView Grid.Column="2" WidthRequest="56" Color="Transparent" />
+        </Grid>
+
+        <ScrollView Grid.Row="1">
+          <Grid Padding="16,4,16,24">
+            <Border Style="{StaticResource PaperCard}" MaximumWidthRequest="560" VerticalOptions="Start">
+                <VerticalStackLayout Spacing="12">
+                    <Grid x:Name="Tabs" ColumnDefinitions="*,*,*,*" ColumnSpacing="6" />
+
+                    <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto,Auto" ColumnSpacing="8" RowSpacing="8">
+                        <Border Style="{StaticResource StatTile}">
+                            <VerticalStackLayout>
+                                <Label Text="PLAYED" Style="{StaticResource Caption}" HorizontalOptions="Center" />
+                                <Label x:Name="Played" Style="{StaticResource Display}" FontSize="26" HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+                        </Border>
+                        <Border Grid.Column="1" Style="{StaticResource StatTile}">
+                            <VerticalStackLayout>
+                                <Label Text="WON" Style="{StaticResource Caption}" HorizontalOptions="Center" />
+                                <Label x:Name="Won" Style="{StaticResource Display}" FontSize="26" HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+                        </Border>
+                        <Border Grid.Column="2" Style="{StaticResource StatTile}">
+                            <VerticalStackLayout>
+                                <Label Text="WIN RATE" Style="{StaticResource Caption}" HorizontalOptions="Center" />
+                                <Label x:Name="Rate" Style="{StaticResource Display}" FontSize="26" HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+                        </Border>
+                        <Border Grid.Row="1" Style="{StaticResource StatTile}">
+                            <VerticalStackLayout>
+                                <Label Text="STREAK" Style="{StaticResource Caption}" HorizontalOptions="Center" />
+                                <Label x:Name="Streak" Style="{StaticResource Display}" FontSize="26" HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource StatTile}">
+                            <VerticalStackLayout>
+                                <Label Text="BEST STREAK" Style="{StaticResource Caption}" HorizontalOptions="Center" />
+                                <Label x:Name="BestStreak" Style="{StaticResource Display}" FontSize="26" HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="2" Style="{StaticResource StatTile}">
+                            <VerticalStackLayout>
+                                <Label Text="BEST TIME" Style="{StaticResource Caption}" HorizontalOptions="Center" />
+                                <Label x:Name="BestTime" Style="{StaticResource Display}" FontSize="26" HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </Grid>
+
+                    <Label Text="FASTEST SWEEPS" Style="{StaticResource SectionTitle}" />
+                    <VerticalStackLayout x:Name="Leaderboard" Spacing="6" />
+
+                    <c:GameButton x:Name="ResetButton" Text="RESET THIS DIFFICULTY" FontSize="14" ButtonColor="{StaticResource Red}" Clicked="OnReset" />
+                </VerticalStackLayout>
+            </Border>
+          </Grid>
+        </ScrollView>
+    </Grid>
+</ContentPage>

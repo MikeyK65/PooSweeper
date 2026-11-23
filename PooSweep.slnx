@@ -1,3 +1,5 @@
 <Solution>
   <Project Path="PooSweep.csproj" />
+  <Project Path="Core/PooSweep.Core.csproj" />
+  <Project Path="PooSweep.Tests/PooSweep.Tests.csproj" />
 </Solution>

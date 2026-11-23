@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:c="clr-namespace:PooSweep.Controls"
+             x:Class="PooSweep.Pages.GamePage"
+             Title="PooSweep">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+        <c:SceneView x:Name="Scene" Grid.RowSpan="3" Horizon="0.16" />
+
+        <!-- ===== HUD ===== -->
+        <Grid Grid.Row="0" Padding="12,10,12,0" ColumnDefinitions="Auto,*,Auto,*,Auto" ColumnSpacing="8"
+              MaximumWidthRequest="640">
+
+            <c:GameButton x:Name="BackButton" Icon="Back" FontSize="18" ButtonColor="{StaticResource WoodLight}"
+                          ClickSound="UiBack" Clicked="OnBack" VerticalOptions="Center"
+                          SemanticProperties.Description="Back to menu" />
+
+            <Border Grid.Column="1" Style="{StaticResource WoodPanel}" HorizontalOptions="End" VerticalOptions="Center" MinimumWidthRequest="96">
+                <HorizontalStackLayout Spacing="6" HorizontalOptions="Center">
+                    <c:IconView Icon="Poo" WidthRequest="30" HeightRequest="30" />
+                    <Label x:Name="PooCounter" Text="10" Style="{StaticResource HudText}" />
+                </HorizontalStackLayout>
+            </Border>
+
+            <c:DogView x:Name="Dog" Grid.Column="2" WidthRequest="78" HeightRequest="78" Tapped="OnDogTapped"
+                       SemanticProperties.Description="New game"
+                       SemanticProperties.Hint="Starts a fresh yard" />
+
+            <Border Grid.Column="3" Style="{StaticResource WoodPanel}" HorizontalOptions="Start" VerticalOptions="Center" MinimumWidthRequest="110">
+                <HorizontalStackLayout Spacing="6" HorizontalOptions="Center">
+                    <c:IconView Icon="Clock" WidthRequest="28" HeightRequest="28" />
+                    <Label x:Name="TimerLabel" Text="00:00" Style="{StaticResource HudText}" />
+                </HorizontalStackLayout>
+            </Border>
+
+            <c:GameButton x:Name="SoundButton" Grid.Column="4" Icon="SpeakerOn" FontSize="18" ButtonColor="{StaticResource WoodLight}"
+                          ClickSound="UiToggle" Clicked="OnToggleSound" VerticalOptions="Center"
+                          SemanticProperties.Description="Toggle sound" />
+        </Grid>
+
+        <!-- ===== Board ===== -->
+        <c:BoardView x:Name="Board" Grid.Row="1" Margin="4" />
+
+        <!-- ===== Bottom bar ===== -->
+        <Grid Grid.Row="2" Padding="16,0,16,14" ColumnDefinitions="*,Auto,*" MaximumWidthRequest="640">
+            <Label x:Name="DifficultyLabel" Style="{StaticResource HudText}" FontSize="16" HorizontalOptions="Start" />
+
+            <Border Grid.Column="1" Style="{StaticResource WoodPanel}" Padding="4" StrokeShape="RoundRectangle 20">
+                <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="4">
+                    <Border x:Name="DigChip" StrokeThickness="0" StrokeShape="RoundRectangle 16" Padding="14,6"
+                            SemanticProperties.Description="Dig mode">
+                        <HorizontalStackLayout Spacing="6">
+                            <c:IconView Icon="Shovel" WidthRequest="24" HeightRequest="24" />
+                            <Label x:Name="DigModeLabel" Text="DIG" Style="{StaticResource Display}" FontSize="18" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnDigMode" />
+                        </Border.GestureRecognizers>
+                    </Border>
+                    <Border x:Name="FlagChip" Grid.Column="1" StrokeThickness="0" StrokeShape="RoundRectangle 16" Padding="14,6"
+                            SemanticProperties.Description="Flag mode">
+                        <HorizontalStackLayout Spacing="6">
+                            <c:IconView Icon="Flag" WidthRequest="24" HeightRequest="24" />
+                            <Label x:Name="FlagModeLabel" Text="FLAG" Style="{StaticResource Display}" FontSize="18" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnFlagMode" />
+                        </Border.GestureRecognizers>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <Label x:Name="HintLabel" Grid.Column="2" Style="{StaticResource Caption}" TextColor="White" FontSize="12"
+                   HorizontalOptions="End" VerticalOptions="Center" HorizontalTextAlignment="End" />
+        </Grid>
+
+        <!-- ===== Game over card ===== -->
+        <Grid x:Name="EndOverlay" Grid.RowSpan="3" IsVisible="False" Opacity="0" BackgroundColor="#66000000" Padding="24">
+            <Border x:Name="EndCard" Style="{StaticResource PaperCard}" VerticalOptions="Center" HorizontalOptions="Center"
+                    MaximumWidthRequest="380" Padding="20,16">
+                <VerticalStackLayout Spacing="8">
+                    <c:DogView x:Name="EndDog" WidthRequest="96" HeightRequest="96" HorizontalOptions="Center" />
+                    <Label x:Name="EndTitle" Style="{StaticResource Display}" FontSize="32" HorizontalOptions="Center" HorizontalTextAlignment="Center" />
+                    <Label x:Name="EndMessage" Style="{StaticResource Body}" HorizontalOptions="Center" HorizontalTextAlignment="Center" />
+
+                    <Border x:Name="RecordBadge" IsVisible="False" BackgroundColor="{StaticResource Gold}" Stroke="{StaticResource WoodDark}"
+                            StrokeThickness="2" StrokeShape="RoundRectangle 12" Padding="12,4" HorizontalOptions="Center">
+                        <HorizontalStackLayout Spacing="6">
+                            <c:IconView Icon="Trophy" Tint="{StaticResource WoodDark}" WidthRequest="22" HeightRequest="22" />
+                            <Label x:Name="RecordLabel" Style="{StaticResource Display}" FontSize="16" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8" Margin="0,4">
+                        <Border Style="{StaticResource StatTile}">
+                            <VerticalStackLayout>
+                                <Label Text="TIME" Style="{StaticResource Caption}" HorizontalOptions="Center" />
+                                <Label x:Name="EndTime" Style="{StaticResource Display}" FontSize="20" HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+                        </Border>
+                        <Border Grid.Column="1" Style="{StaticResource StatTile}">
+                            <VerticalStackLayout>
+                                <Label Text="BEST" Style="{StaticResource Caption}" HorizontalOptions="Center" />
+                                <Label x:Name="EndBest" Style="{StaticResource Display}" FontSize="20" HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+                        </Border>
+                        <Border Grid.Column="2" Style="{StaticResource StatTile}">
+                            <VerticalStackLayout>
+                                <Label Text="STREAK" Style="{StaticResource Caption}" HorizontalOptions="Center" />
+                                <Label x:Name="EndStreak" Style="{StaticResource Display}" FontSize="20" HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </Grid>
+
+                    <c:GameButton Text="PLAY AGAIN" Icon="Shovel" FontSize="22" ButtonColor="{StaticResource Orange}" Clicked="OnPlayAgain" />
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                        <c:GameButton Text="VIEW YARD" FontSize="15" ButtonColor="{StaticResource Blue}" Clicked="OnViewBoard" />
+                        <c:GameButton Grid.Column="1" Text="MENU" FontSize="15" ButtonColor="{StaticResource InkSoft}" ClickSound="UiBack" Clicked="OnBack" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+    </Grid>
+</ContentPage>

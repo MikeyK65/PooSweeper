@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:c="clr-namespace:PooSweep.Controls"
+             x:Class="PooSweep.Pages.TitlePage"
+             Title="PooSweep">
+
+    <Grid>
+        <c:SceneView x:Name="Scene" Mode="Title" Horizon="0.52" />
+
+        <!-- Main menu -->
+        <VerticalStackLayout x:Name="Menu"
+                             VerticalOptions="End"
+                             HorizontalOptions="Fill"
+                             MaximumWidthRequest="440"
+                             Padding="24,0,24,32"
+                             Spacing="10">
+            <c:GameButton x:Name="PlayButton" Text="PLAY" Icon="Shovel" FontSize="34"
+                          ButtonColor="{StaticResource Orange}" Clicked="OnPlay" />
+            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                <c:GameButton Text="HOW TO" Icon="Question" FontSize="16" ButtonColor="{StaticResource Blue}" Clicked="OnHowTo" />
+                <c:GameButton Grid.Column="1" Text="STATS" Icon="Trophy" FontSize="16" ButtonColor="{StaticResource Purple}" Clicked="OnStats" />
+                <c:GameButton Grid.Column="2" Text="OPTIONS" Icon="Gear" FontSize="16" ButtonColor="{StaticResource Green}" Clicked="OnSettings" />
+            </Grid>
+        </VerticalStackLayout>
+
+        <!-- Difficulty picker -->
+        <Grid x:Name="Picker" IsVisible="False" BackgroundColor="{StaticResource Scrim}" Opacity="0" Padding="20">
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnPickerBackgroundTapped" />
+            </Grid.GestureRecognizers>
+
+            <Border x:Name="PickerCard" Style="{StaticResource PaperCard}"
+                    VerticalOptions="Center" HorizontalOptions="Center"
+                    MaximumWidthRequest="420" Scale="0.9">
+                <Border.GestureRecognizers>
+                    <!-- swallow taps so they don't close the picker -->
+                    <TapGestureRecognizer />
+                </Border.GestureRecognizers>
+                <ScrollView>
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="PICK YOUR YARD" Style="{StaticResource Display}" FontSize="28"
+                               HorizontalOptions="Center" TextColor="{StaticResource WoodDark}" />
+                        <VerticalStackLayout x:Name="DifficultyList" Spacing="10" />
+
+                        <!-- custom editor -->
+                        <VerticalStackLayout x:Name="CustomEditor" IsVisible="False" Spacing="6">
+                            <Grid ColumnDefinitions="90,*,Auto" ColumnSpacing="8">
+                                <Label Text="Rows" VerticalOptions="Center" />
+                                <Label Grid.Column="1" x:Name="RowsLabel" Style="{StaticResource Display}" FontSize="22" VerticalOptions="Center" HorizontalOptions="Center" />
+                                <Stepper Grid.Column="2" x:Name="RowsStepper" Minimum="5" Maximum="24" Increment="1" ValueChanged="OnCustomChanged" />
+                            </Grid>
+                            <Grid ColumnDefinitions="90,*,Auto" ColumnSpacing="8">
+                                <Label Text="Columns" VerticalOptions="Center" />
+                                <Label Grid.Column="1" x:Name="ColsLabel" Style="{StaticResource Display}" FontSize="22" VerticalOptions="Center" HorizontalOptions="Center" />
+                                <Stepper Grid.Column="2" x:Name="ColsStepper" Minimum="5" Maximum="30" Increment="1" ValueChanged="OnCustomChanged" />
+                            </Grid>
+                            <Grid ColumnDefinitions="90,*,Auto" ColumnSpacing="8">
+                                <Label Text="Poos" VerticalOptions="Center" />
+                                <Label Grid.Column="1" x:Name="PooLabel" Style="{StaticResource Display}" FontSize="22" VerticalOptions="Center" HorizontalOptions="Center" />
+                                <Stepper Grid.Column="2" x:Name="PooStepper" Minimum="1" Maximum="100" Increment="1" ValueChanged="OnCustomChanged" />
+                            </Grid>
+                            <Label x:Name="DensityLabel" Style="{StaticResource Caption}" HorizontalOptions="Center" />
+                            <c:GameButton Text="START CUSTOM" FontSize="20" ButtonColor="{StaticResource Green}" Clicked="OnStartCustom" />
+                        </VerticalStackLayout>
+
+                        <c:GameButton Text="BACK" FontSize="16" ButtonColor="{StaticResource InkSoft}" ClickSound="UiBack" Clicked="OnClosePicker" />
+                    </VerticalStackLayout>
+                </ScrollView>
+            </Border>
+        </Grid>
+    </Grid>
+</ContentPage>
